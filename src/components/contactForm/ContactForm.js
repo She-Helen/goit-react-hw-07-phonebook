@@ -14,6 +14,7 @@ class ContactForm extends React.Component {
     name: '',
     number: '',
     error: false,
+    errorMsg: '',
   };
 
   handleChange = ({ target: { value, name } }) => {
@@ -22,18 +23,32 @@ class ContactForm extends React.Component {
 
   handleSubmitForm = event => {
     event.preventDefault();
-    if (this.props.contacts.find(contact => contact.name === this.state.name)) {
-      this.setState({ error: true, name: '', number: '' });
-      setTimeout(() => {
-        this.setState({ error: false });
-      }, 2500);
+    if (this.state.name) {
+      if (
+        this.props.contacts.find(contact => contact.name === this.state.name)
+      ) {
+        this.setState({
+          error: true,
+          name: '',
+          number: '',
+          errorMsg: 'Contact is already exists!!!',
+        });
+        setTimeout(() => {
+          this.setState({ error: false, errorMsg: '' });
+        }, 2500);
+      } else {
+        const contact = {
+          name: this.state.name,
+          number: this.state.number,
+        };
+        this.props.addContact(contact);
+        this.setState({ name: '', number: '' });
+      }
     } else {
-      const contact = {
-        name: this.state.name,
-        number: this.state.number,
-      };
-      this.props.addContact(contact);
-      this.setState({ name: '', number: '' });
+      this.setState({ error: true, errorMsg: 'Please, enter the name!' });
+      setTimeout(() => {
+        this.setState({ error: false, errorMsg: '' });
+      }, 2500);
     }
   };
 
@@ -66,7 +81,7 @@ class ContactForm extends React.Component {
           classNames={slideNotiAppear}
           unmountOnExit
         >
-          <Notification />
+          <Notification text={this.state.errorMsg} />
         </CSSTransition>
       </>
     );

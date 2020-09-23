@@ -1,9 +1,15 @@
 import { combineReducers } from 'redux';
 import {
   FILTERCONTACTS,
+  ADDCONTACTREQUEST,
   ADDCONTACTSUCCESS,
+  ADDCONTACTERROR,
+  FECHCONTACTREQUEST,
   FECHCONTACTSUCCESS,
+  FECHCONTACTERROR,
+  REMOVECONTACTREQUEST,
   REMOVECONTACTSUCCESS,
+  REMOVECONTACTERROR,
 } from '../types/types';
 
 const items = (state = [], action) => {
@@ -26,8 +32,27 @@ const filter = (state = '', action) => {
       return state;
   }
 };
+const loading = (state = false, action) => {
+  switch (action.type) {
+    case ADDCONTACTREQUEST:
+    case FECHCONTACTREQUEST:
+    case REMOVECONTACTREQUEST:
+      return true;
 
-export default combineReducers({ items, filter });
+    case ADDCONTACTSUCCESS:
+    case ADDCONTACTERROR:
+    case FECHCONTACTSUCCESS:
+    case FECHCONTACTERROR:
+    case REMOVECONTACTSUCCESS:
+    case REMOVECONTACTERROR:
+      return false;
+
+    default:
+      return state;
+  }
+};
+
+export default combineReducers({ items, filter, loading });
 
 // // with toolkit___________
 

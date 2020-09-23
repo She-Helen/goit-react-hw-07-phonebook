@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Notification.module.css';
 
-export function Notification() {
-  return <div className={styles.pop}>Contact is already exists!!!</div>;
+export function Notification(props) {
+  return <div className={styles.pop}>{props.text}</div>;
 }
